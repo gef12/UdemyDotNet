@@ -5,7 +5,7 @@ namespace ProEventos.Persistence.Contratos
 {
 
 
-    //EVENTOS
+    //Palestrantes
     public interface IPalestrantePersist
     {
 

@@ -28,5 +28,7 @@ namespace ProEventos.Domain
 
 
         public IEnumerable<PalestranteEvento> PalestrantesEventos { get; set; }
+
+
     }
 }

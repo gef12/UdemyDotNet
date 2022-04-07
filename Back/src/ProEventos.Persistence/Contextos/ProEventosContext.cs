@@ -21,10 +21,12 @@ namespace ProEventos.Persistence.Contextos
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //tabela que compartilha os dados de muitos para muitos 
             modelBuilder.Entity<PalestranteEvento>()
                     .HasKey(PE => new { PE.EventoId, PE.PalestranteId });
 
-
+            //deletando em cascata qunado apga um evento apaga redes  sociais e palestrantes junto 
             modelBuilder.Entity<Evento>()
                     .HasMany(e => e.RedesSociais)
                     .WithOne(rs => rs.Evento)

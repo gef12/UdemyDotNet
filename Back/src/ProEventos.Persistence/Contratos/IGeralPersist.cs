@@ -4,8 +4,7 @@ using ProEventos.Domain;
 namespace ProEventos.Persistence.Contratos
 {
 
-
-    //EVENTOS
+    //mmetodos Gerais
     public interface IGeralPersist
     {
         void Add<T>(T entity) where T : class;

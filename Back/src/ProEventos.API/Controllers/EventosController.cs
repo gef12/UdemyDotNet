@@ -92,7 +92,7 @@ namespace ProEventos.API.Controllers
             try
             {
                 var evento = await _eventoService.GetEventoByIdAsync(id, true);
-                if (evento == null) return NotFound("Nenhum evento por tema  Encontrdao");
+                if (evento == null) return NotFound("Nenhum evento por tema  Encontrado");
                 return Ok(evento);
             }
             catch (Exception ex)

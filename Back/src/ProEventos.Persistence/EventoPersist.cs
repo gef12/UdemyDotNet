@@ -17,7 +17,7 @@ namespace ProEventos.Persistence
         {
             _context = context;
 
-            //funciona para todos os metodos gets ma scasao uma plaicação tenha neccesidade do track basta fazer metodo a metodo
+            //funciona para todos os metodos gets mas casa  uma aplicação tenha neccesidade do track basta fazer metodo a metodo
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 

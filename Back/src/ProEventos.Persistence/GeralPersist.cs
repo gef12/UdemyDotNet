@@ -9,7 +9,7 @@ namespace ProEventos.Persistence
 {
 
 
-    //EVENTOS
+    //Geral
     public class GeralPersist : IGeralPersist
     {
         private readonly ProEventosContext _context;

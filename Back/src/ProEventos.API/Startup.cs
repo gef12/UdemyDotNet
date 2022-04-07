@@ -37,6 +37,9 @@ namespace ProEventos.API
             services.AddDbContext<ProEventosContext>(
                 context => context.UseSqlite(Configuration.GetConnectionString("Default"))
             );
+
+            //resolvendo problema de loop do json onde eel fica em loop pois 
+            //tem refrencia da classe 1 para classe 2 e da classe 2 para classe 1
             services.AddControllers()
                         .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling =
                                 Newtonsoft.Json.ReferenceLoopHandling.Ignore

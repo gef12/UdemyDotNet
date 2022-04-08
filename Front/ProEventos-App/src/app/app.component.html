@@ -1,17 +1,20 @@
 <app-nav></app-nav>
 
-
-<div class="container text-center">
+<!-- <div class="container text-center">
 
   <app-eventos></app-eventos>
 
+  <app-contatos></app-contatos>
+  <app-dashboard></app-dashboard>
 
-  <h1>Palestrantes </h1>
+  <app-perfil></app-perfil>
   <app-palestrantes></app-palestrantes>
 
-  <router-outlet></router-outlet>
 
-  <ngx-spinner type="ball-scale-multiple" bdColor="rgba(51,51,51,0.8)" size="medium">
-    <p style="font-size: 20px; color: white;">Carregando...</p>
-  </ngx-spinner>
+</div> -->
+<div class="container text-center">
+  <router-outlet></router-outlet>
 </div>
+<ngx-spinner type="ball-scale-multiple" bdColor="rgba(51,51,51,0.8)" size="medium">
+  <p style="font-size: 20px; color: white;">Carregando...</p>
+</ngx-spinner>

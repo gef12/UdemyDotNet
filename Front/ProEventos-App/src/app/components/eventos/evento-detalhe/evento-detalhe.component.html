@@ -25,13 +25,14 @@
           <div *ngIf="f.local.errors?.required" class="invalid-feedback">
             local é obrigatório
           </div>
+          <div *ngIf="f.local.errors?.minlength" class="invalid-feedback">
+            local deve ter no minimo 4 caracteres.
+          </div>
+          <div *ngIf="f.local.errors?.maxlength" class="invalid-feedback">
+            local deve ter no maximo 50 caracteres.
+          </div>
         </div>
-        <div *ngIf="f.local.errors?.minlength" class="invalid-feedback">
-          local deve ter no minimo 4 caracteres.
-        </div>
-        <div *ngIf="f.local.errors?.maxlength" class="invalid-feedback">
-          local deve ter no maximo 50 caracteres.
-        </div>
+
         <div class="form-group col-md-4">
           <label>Data e Hora</label>
           <input type="datetime" class="form-control " formControlName="dataEvento" placeholder=""

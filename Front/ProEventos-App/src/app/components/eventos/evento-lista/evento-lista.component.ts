@@ -102,26 +102,30 @@ export class EventoListaComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
   }
 
+  //refatorando pra usar o .add( () => this.spinner.hide());
   confirm(): void {
     this.modalRef?.hide();
     this.spinner.show();
-    this.eventoService.deleteEvento(this.eventoId).subscribe(
-      (result: string) => {
-        this.toastr.success(' Evento foi deletado com sucesso!', 'Deletado!');
-        this.spinner.hide();
-        this.carregarEventos();
-      },
-      (error: any) => {
-        console.error(error);
-        this.toastr.error(
-          `Erro ao tentar apagar o evento ${this.eventoId}`,
-          'Erro'
-        );
-      },
-      () => {
-        this.spinner.hide();
-      }
-    );
+    this.eventoService
+      .deleteEvento(this.eventoId)
+      .subscribe(
+        (result: string) => {
+          this.toastr.success(' Evento foi deletado com sucesso!', 'Deletado!');
+          //this.spinner.hide();
+          this.carregarEventos();
+        },
+        (error: any) => {
+          console.error(error);
+          this.toastr.error(
+            `Erro ao tentar apagar o evento ${this.eventoId}`,
+            'Erro'
+          );
+        }
+        //() => {
+        //  this.spinner.hide();
+        //}
+      )
+      .add(() => this.spinner.hide()); //o uso do add adicionar o show toda avez que ele sai do error, sucess
     this.toastr.success(' Evento foi deletado com sucesso!', 'Deletado!');
   }
 

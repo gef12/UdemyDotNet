@@ -23,7 +23,7 @@ export class EventoDetalheComponent implements OnInit {
   evento = {} as Evento;
 
   //variavel para controlar se e para salvar ou atulaizar
-  estadoSalvar = 'post';
+  estadoSalvar = 'post' as string;
 
   get f(): any {
     return this.form.controls;
@@ -42,7 +42,7 @@ export class EventoDetalheComponent implements OnInit {
     private fb: FormBuilder,
     private localeService: BsLocaleService,
     private router: ActivatedRoute,
-    private eventoServide: EventoService,
+    private eventoService: EventoService,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService
   ) {
@@ -56,7 +56,7 @@ export class EventoDetalheComponent implements OnInit {
       this.estadoSalvar = 'put'; //variavel de controle para update
       this.spinner.show();
       //+ converte para int
-      this.eventoServide.getEventoById(+eventoIdParam).subscribe(
+      this.eventoService.getEventoById(+eventoIdParam).subscribe(
         // next: () =>{},
         // error: () =>{},
         // complete: () =>{},
@@ -122,7 +122,7 @@ export class EventoDetalheComponent implements OnInit {
     if (this.form.valid) {
       if (this.estadoSalvar === 'post') {
         this.evento = { ...this.form.value };
-        this.eventoServide.postEvento(this.evento).subscribe(
+        this.eventoService.postEvento(this.evento).subscribe(
           () => {
             this.toastr.success('Evento salvo com sucesso.', 'Sucesso');
           },
@@ -137,7 +137,7 @@ export class EventoDetalheComponent implements OnInit {
         );
       } else {
         this.evento = { id: this.evento.id, ...this.form.value };
-        this.eventoServide.putEvento(this.evento.id, this.evento).subscribe(
+        this.eventoService.putEvento(this.evento.id, this.evento).subscribe(
           () => {
             this.toastr.success('Evento atualizado com sucesso.', 'Sucesso');
           },
@@ -153,4 +153,31 @@ export class EventoDetalheComponent implements OnInit {
       }
     }
   }
+
+  // outra forma de fazer utilizando uma variavel que indica se e put ou post lembrando que muda em vez de enviar o evento id
+  //so envia o evento no put
+  // public salvarAlteracao(): void {
+  //   this.spinner.show();
+  //   if (this.form.valid) {
+  //     //ternario
+  //     this.evento =
+  //       this.estadoSalvar === 'post'
+  //         ? (this.evento = { ...this.form.value })
+  //         : (this.evento = { id: this.evento.id, ...this.form.value });
+
+  //     this.eventoService[this.estadoSalvar](this.evento).subscribe(
+  //       () => {
+  //         this.toastr.success('Evento salvo com sucesso.', 'Sucesso');
+  //       },
+  //       (error: any) => {
+  //         console.error(error);
+  //         this.spinner.hide();
+  //         this.toastr.error('Erro ao salvar evento', 'Erro');
+  //       },
+  //       () => {
+  //         this.spinner.hide();
+  //       }
+  //     );
+  //   }
+  // }
 }

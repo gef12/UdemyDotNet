@@ -162,13 +162,17 @@ namespace ProEventos.API.Controllers
         {
             try
             {
+                var evento = await _eventoService.GetEventoByIdAsync(id, true);
+                if (evento == null) return NoContent();
+
                 if (await _eventoService.DeleteEvento(id))
                 {
-                    return Ok("deletado");
+                    return Ok(new { message = "Deletado" });
                 }
                 else
                 {
                     return BadRequest("Evento não deletado");
+                    //return new  Exception ("Ocorreu um errro ao deletar ");
                 }
             }
             catch (Exception ex)

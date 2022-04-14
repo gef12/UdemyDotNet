@@ -19,10 +19,13 @@ namespace ProEventos.Application.Dtos
         // [StringLength(50, MinimumLength = 3, ErrorMessage="O campo deve esta entre 4 e 50 caracteres")]
         public string Tema { get; set; }
 
-        public int QtdPessoas { get; set; }
+
 
         [Display(Name = "Qtd Pessoas")]
         [Range(1, 120000, ErrorMessage = "{0} deve esta entre 1 a 120000.")]
+        public int QtdPessoas { get; set; }
+
+
 
         [RegularExpression(@".*\.(gif|jpe?g|bmp|png)$", ErrorMessage = "Não é uma imagem válida (gif | jpeg | jpg| bmp | png)")]
         public string ImagemURL { get; set; }

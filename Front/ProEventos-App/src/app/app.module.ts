@@ -34,6 +34,7 @@ import { RegistrationComponent } from './components/user/registration/registrati
 //data ptbr
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { LoteService } from './services/lote.service';
 defineLocale('pt-br', ptBrLocale);
 
 @NgModule({
@@ -75,7 +76,7 @@ defineLocale('pt-br', ptBrLocale);
   ],
 
   //provider de service
-  providers: [EventoService],
+  providers: [EventoService, LoteService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -12,6 +12,7 @@ import { Evento } from '@app/models/Evento';
 import { Lote } from '@app/models/Lote';
 import { EventoService } from '@app/services/evento.service';
 import { LoteService } from '@app/services/lote.service';
+import { environment } from '@environments/environment';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
@@ -34,6 +35,10 @@ export class EventoDetalheComponent implements OnInit {
 
   //variavel para controlar se e para salvar ou atulaizar
   estadoSalvar = 'post' as string;
+
+  imagemURL = 'assets/img/upload.png';
+
+  file: File | any;
 
   get modoEditar(): boolean {
     return this.estadoSalvar == 'put';
@@ -79,7 +84,7 @@ export class EventoDetalheComponent implements OnInit {
     //modificado para não pegar nulo
     //this.eventoId = +this.activatedRouter.snapshot.params['id'];
 
-    console.log(this.activatedRouter.snapshot.paramMap.get('id'));
+    //console.log(this.activatedRouter.snapshot.paramMap.get('id'));
 
     if (this.eventoId !== null && this.eventoId !== 0) {
       this.estadoSalvar = 'put'; //variavel de controle para update
@@ -94,10 +99,15 @@ export class EventoDetalheComponent implements OnInit {
           //this.evento = Object.assign({}, evento);
           this.evento = { ...evento };
           this.form.patchValue(this.evento);
+
+          if (this.evento.imagemURL !== '') {
+            this.imagemURL =
+              environment.apiURL + 'resources/images/' + this.evento.imagemURL;
+          }
+
           //duas forma de fazer esta vc ja possui os lotes no evento então basta carregar
           //a outra usa chamar um metodo
           //this.carregarLotes();
-
           this.evento.lotes.forEach((lote) => {
             this.lotes.push(this.criarLote(lote));
           });
@@ -158,7 +168,7 @@ export class EventoDetalheComponent implements OnInit {
         ],
       ],
       qtdPessoas: ['', [Validators.required, Validators.max(120000)]],
-      imagemURL: ['', Validators.required],
+      imagemURL: [''],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       //pode ter 1 ou varios lotes e ambos devem ser validados
@@ -344,5 +354,35 @@ export class EventoDetalheComponent implements OnInit {
 
   declineDeleleLote(): void {
     this.modalRef?.hide();
+  }
+
+  onFileChange(ev: any): void {
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => (this.imagemURL = event.target.result);
+
+    this.file = ev.target.files;
+
+    reader.readAsDataURL(this.file[0]);
+
+    this.uploadImagem();
+  }
+
+  uploadImagem(): void {
+    this.spinner.show();
+
+    this.eventoService
+      .postUpload(this.eventoId, this.file)
+      .subscribe(
+        () => {
+          this.carregarEvento();
+          this.toastr.success('imagem atualizada com suceso', 'Sucesss!');
+        },
+        (error: any) => {
+          this.toastr.error('error em  atualizar a imagem', 'Error!');
+          console.error(error);
+        }
+      )
+      .add(() => this.spinner.hide());
   }
 }

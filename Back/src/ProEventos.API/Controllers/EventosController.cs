@@ -50,6 +50,7 @@ namespace ProEventos.API.Controllers
         public EventosController(IEventoService eventoService, IWebHostEnvironment hostEnvironment)
         {
             _eventoService = eventoService;
+            _hostEnvironment = hostEnvironment;
         }
 
 
@@ -142,30 +143,6 @@ namespace ProEventos.API.Controllers
         }
 
 
-        [HttpPost("upload-image/{eventoId}")]
-        public async Task<IActionResult> UploadImage(int eventoId)
-        {
-            try
-            {
-                var evento = await _eventoService.GetEventoByIdAsync(eventoId, true);
-                if (evento == null) return NoContent();
-
-                var file = Request.Form.Files[0];
-
-                if (file.Length > 0)
-                {
-                    DeleteImage(evento.ImagemURL);
-                    evento.ImagemURL = await SaveImage(file);
-                }
-                var EventoRetorno = await _eventoService.UpdateEvento(eventoId, evento);
-                return Ok(EventoRetorno);
-            }
-            catch (Exception ex)
-            {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar adicionar eventos . Erro: {ex.Message} ");
-            }
-        }
 
 
 
@@ -196,6 +173,7 @@ namespace ProEventos.API.Controllers
 
                 if (await _eventoService.DeleteEvento(id))
                 {
+                    DeleteImage(evento.ImagemURL);
                     return Ok(new { message = "Deletado" });
                 }
                 else
@@ -208,6 +186,33 @@ namespace ProEventos.API.Controllers
             {
 
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar deletera os eventos . Erro: {ex.Message} ");
+            }
+        }
+
+
+
+        [HttpPost("upload-image/{eventoId}")]
+        public async Task<IActionResult> UploadImage(int eventoId)
+        {
+            try
+            {
+                var evento = await _eventoService.GetEventoByIdAsync(eventoId, true);
+                if (evento == null) return NoContent();
+
+                var file = Request.Form.Files[0];
+
+                if (file.Length > 0)
+                {
+                    DeleteImage(evento.ImagemURL);
+                    evento.ImagemURL = await SaveImage(file);
+                }
+                var EventoRetorno = await _eventoService.UpdateEvento(eventoId, evento);
+                return Ok(EventoRetorno);
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar adicionar imagens . Erro: {ex.Message} ");
             }
         }
 
@@ -235,7 +240,7 @@ namespace ProEventos.API.Controllers
         [NonAction]
         public void DeleteImage(string imageName)
         {
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images");
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
 
             if (System.IO.File.Exists(imagePath))
             {

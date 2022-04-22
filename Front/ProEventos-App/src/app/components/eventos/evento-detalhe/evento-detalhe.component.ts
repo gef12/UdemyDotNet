@@ -56,6 +56,10 @@ export class EventoDetalheComponent implements OnInit {
       showWeekNumbers: false,
     };
   }
+
+  retornaTituloNome(value: string): string {
+    return value === null || value === '' ? 'Nome do Lote' : value;
+  }
   constructor(
     private fb: FormBuilder,
     private localeService: BsLocaleService,
@@ -211,7 +215,8 @@ export class EventoDetalheComponent implements OnInit {
           (eventoRetorno: Evento) => {
             this.toastr.success('Evento salvo com sucesso.', 'Sucesso');
             //this.estadoSalvar = 'put';
-            this.router.navigate([`eventos/detalhe/${eventoRetorno.id}`]);
+            // this.router.navigate([`eventos/detalhe/${eventoRetorno.id}`]);
+            this.router.navigate([`eventos/lista`]);
           },
           (error: any) => {
             console.error(error);
@@ -277,7 +282,7 @@ export class EventoDetalheComponent implements OnInit {
           () => {
             this.toastr.success('Lote salvo com sucesso', 'sucesso!');
             this.router.navigate([`eventos/detalhe/${this.eventoId}`]);
-            this.lotes.reset();
+            //this.lotes.reset();
           },
           (error: any) => {
             this.toastr.error('Error ao tentar salvar lotes', 'Error!');

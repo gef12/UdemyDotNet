@@ -113,6 +113,8 @@
         <div formArrayName="lotes" *ngFor="let lote of lotes.controls; let i=index">
           <fieldset [formGroupName]="i" class="form-group">
             <legend class="d-flex justify-content-between capitalize">
+              {{retornaTituloNome(lotes.get(i+'.nome')?.value)}}
+
               <button (click)="removerLote($event, template, i)" class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex"
                 tooltip="Excluir Lote" [adaptivePosition]="false" [delay]="500" placement="left">
                 <i class="fa fa-window-close my-1"></i>
@@ -141,7 +143,9 @@
               </div>
               <div class="form-group col-md-4">
                 <label>Preço</label>
-                <input type="number" currencyMask class="form-control" formControlName="preco" placeholder="R$ 0,00"
+                <input type="text" currencyMask
+                  [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align:'left', allowNegative: false }"
+                  class="form-control" formControlName="preco" placeholder="R$ 0,00"
                   [ngClass]="cssValidator($any(lotes?.get(i+'.preco')))">
                 <div *ngIf="f.lotes.get(i+'.preco').errors?.required" class="invalid-feedback">
                   preco é obrigatório

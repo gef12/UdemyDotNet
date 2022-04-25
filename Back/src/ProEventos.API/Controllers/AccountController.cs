@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProEventos.API.Extensions;
 using ProEventos.Application.Contratos;
 using ProEventos.Application.Dtos;
 
@@ -25,20 +27,74 @@ namespace ProEventos.API.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpGet("GetUser/{userName}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetUser(string userName)
+        [HttpGet("GetUser")]
+        //[AllowAnonymous]
+        public async Task<IActionResult> GetUser()
         {
             try
             {
+                var userName = User.GetUserName();
+                //var userName = User.FindFirst(ClaimTypes.Name)?.Value;
                 var user = await _accountService.GetUserByUserName(userName);
 
-                return Ok();
+                return Ok(user);
             }
             catch (Exception ex)
             {
 
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar recuperar  usuario . Erro: {ex.Message} ");
+            }
+        }
+
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto)
+        {
+            try
+            {
+                var user = await _accountService.GetUserByUserName(userLoginDto.Username);
+                if (user == null) return Unauthorized("Usuario ou senha Invalido");
+
+                //verificando se usuario e senha estão certos
+                var result = await _accountService.CheckUserPasswordAsync(user, userLoginDto.Password);
+                if (!result.Succeeded) return Unauthorized("Usuario ou senha Invalido");
+
+                return Ok(new
+                {
+                    userName = user.Username,
+                    PrimeiroNome = user.PrimeiroNome,
+                    token = _tokenService.CreateToken(user).Result
+
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar fazer login do  usuario . Erro: {ex.Message} ");
+            }
+        }
+
+        [HttpPost("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(UserUpdateDto userUpdateDto)
+        {
+            try
+            {
+                var user = await _accountService.GetUserByUserName(User.GetUserName());
+                if (user == null) return Unauthorized("Usuario Invalido");
+
+                var userReturn = await _accountService.UpdateAccount(userUpdateDto);
+
+
+                if (userReturn == null)
+                    return NoContent();
+
+
+                return Ok(userReturn);
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar atualizar  usuario . Erro: {ex.Message} ");
             }
         }
 

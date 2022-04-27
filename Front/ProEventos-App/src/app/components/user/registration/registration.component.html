@@ -9,38 +9,40 @@
 
   <div class="col-md-6">
 
-    <form [formGroup]="form" class="p-1">
+    <form [formGroup]="form" class="p-1" (ngSubmit)="register()">
       <div class="pb-2 d-block d-md-none">
         <h3 class="border-bottom">Cadastro de Usuário</h3>
       </div>
       <div class="form-row">
         <div class="form-group col-sm-6">
           <label>Primeiro Nome</label>
-          <input type="text" class="form-control" formControlName="nome"
-            [ngClass]="{'is-invalid': f.nome.errors && f.nome.touched}" placeholder="Insira o Primeiro nome" />
-          <div *ngIf="f.nome.errors?.required" class="invalid-feedback">
-            nome é obrigatório
+          <input type="text" class="form-control" formControlName="primeiroNome"
+            [ngClass]="{'is-invalid': f.primeiroNome.errors && f.primeiroNome.touched}"
+            placeholder="Insira o Primeiro primeiroNome" />
+          <div *ngIf="f.primeiroNome.errors?.required" class="invalid-feedback">
+            primeiroNome é obrigatório
           </div>
-          <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback">
-            nome deve ter no minimo 4 caracteres.
+          <div *ngIf="f.primeiroNome.errors?.minlength" class="invalid-feedback">
+            primeiroNome deve ter no minimo 4 caracteres.
           </div>
-          <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback">
-            nome deve ter no maximo 20 caracteres.
+          <div *ngIf="f.primeiroNome.errors?.maxlength" class="invalid-feedback">
+            primeiroNome deve ter no maximo 20 caracteres.
           </div>
 
         </div>
         <div class="form-group col-sm-6">
           <label>Último nome</label>
-          <input type="text" class="form-control" formControlName="sobrenome"
-            [ngClass]="{'is-invalid': f.sobrenome.errors && f.sobrenome.touched}" placeholder="Insira o Último nome" />
-          <div *ngIf="f.sobrenome.errors?.required" class="invalid-feedback">
-            sobrenome é obrigatório
+          <input type="text" class="form-control" formControlName="ultimoNome"
+            [ngClass]="{'is-invalid': f.ultimoNome.errors && f.ultimoNome.touched}"
+            placeholder="Insira o Último nome" />
+          <div *ngIf="f.ultimoNome.errors?.required" class="invalid-feedback">
+            ultimoNome é obrigatório
           </div>
-          <div *ngIf="f.sobrenome.errors?.minlength" class="invalid-feedback">
-            sobrenome deve ter no minimo 4 caracteres.
+          <div *ngIf="f.ultimoNome.errors?.minlength" class="invalid-feedback">
+            ultimoNome deve ter no minimo 4 caracteres.
           </div>
-          <div *ngIf="f.sobrenome.errors?.maxlength" class="invalid-feedback">
-            sobrenome deve ter no maximo 20 caracteres.
+          <div *ngIf="f.ultimoNome.errors?.maxlength" class="invalid-feedback">
+            ultimoNome deve ter no maximo 20 caracteres.
           </div>
         </div>
       </div>
@@ -57,15 +59,15 @@
       </div>
       <div class="form-group">
         <label for="">Usuario:</label>
-        <input class="form-control" type="text" formControlName="nomeUser"
-          [ngClass]="{'is-invalid': f.nomeUser.errors && f.nomeUser.touched}" placeholder="Insira o nome de Usuário" />
-        <div *ngIf="f.nomeUser.errors?.required" class="invalid-feedback">
+        <input class="form-control" type="text" formControlName="userName"
+          [ngClass]="{'is-invalid': f.userName.errors && f.userName.touched}" placeholder="Insira o nome de Usuário" />
+        <div *ngIf="f.userName.errors?.required" class="invalid-feedback">
           nome de usuario é obrigatório
         </div>
-        <div *ngIf="f.nomeUser.errors?.minlength" class="invalid-feedback">
+        <div *ngIf="f.userName.errors?.minlength" class="invalid-feedback">
           nome de usuario deve ter no minimo 4 caracteres.
         </div>
-        <div *ngIf="f.nomeUser.errors?.maxlength" class="invalid-feedback">
+        <div *ngIf="f.userName.errors?.maxlength" class="invalid-feedback">
           nome de usuario deve ter no maximo 20 caracteres.
         </div>
       </div>
@@ -106,7 +108,8 @@
       </div>
       <div class="form-row">
         <div class="form-group col-12">
-          <button class="btn btn-lg btn-success btn-block px-5" [disabled]="!form.valid">
+          <button [disabled]="!form.valid" class="btn btn-lg btn-success btn-block px-5" [disabled]="!form.valid"
+            type="submit">
             Registar
           </button>
         </div>

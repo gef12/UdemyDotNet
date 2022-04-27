@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { Evento } from '../models/Evento';
@@ -8,6 +8,12 @@ import { Evento } from '../models/Evento';
 //{providedIn: 'root',}
 export class EventoService {
   baseURL = 'https://localhost:5001/api/eventos';
+
+  // tokenHeader = new HttpHeaders({
+  //   Authorization: `Bearer ${
+  //     JSON.parse(localStorage.getItem('user') || '{}').token
+  //   }`,
+  // });
   constructor(private http: HttpClient) {}
 
   public getEventos(): Observable<Evento[]> {
@@ -47,7 +53,7 @@ export class EventoService {
   }
 
   postUpload(eventoId: number, file: FileList): Observable<Evento> {
-    const fileToUpload = file.item(0) as File;
+    const fileToUpload = file[0] as File;
     const formData = new FormData();
     formData.append('file', fileToUpload);
 

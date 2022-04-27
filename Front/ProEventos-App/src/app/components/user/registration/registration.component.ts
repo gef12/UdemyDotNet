@@ -5,7 +5,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ValidatorField } from '@app/helpers/ValidatorField';
+import { User } from '@app/models/identify/User';
+import { AccountService } from '@app/services/account.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-registration',
@@ -14,11 +18,18 @@ import { ValidatorField } from '@app/helpers/ValidatorField';
 })
 export class RegistrationComponent implements OnInit {
   form: FormGroup | any;
+  user = {} as User;
+
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router,
+    private toaster: ToastrService
+  ) {}
 
   get f(): any {
     return this.form.controls;
   }
-  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.validation();
@@ -30,7 +41,7 @@ export class RegistrationComponent implements OnInit {
     };
     this.form = this.fb.group(
       {
-        nome: [
+        primeiroNome: [
           '',
           [
             Validators.required,
@@ -38,7 +49,7 @@ export class RegistrationComponent implements OnInit {
             Validators.maxLength(20),
           ],
         ],
-        sobrenome: [
+        ultimoNome: [
           '',
           [
             Validators.required,
@@ -47,7 +58,7 @@ export class RegistrationComponent implements OnInit {
           ],
         ],
         email: ['', [Validators.required, Validators.email]],
-        nomeUser: [
+        userName: [
           '',
           [
             Validators.required,
@@ -59,11 +70,11 @@ export class RegistrationComponent implements OnInit {
           '',
           [
             Validators.required,
-            Validators.minLength(6),
+            Validators.minLength(4),
             Validators.maxLength(20),
           ],
         ],
-        confirmPassword: ['', [Validators.required]],
+        confirmPassword: ['', Validators.required],
       },
       formOptions
     );
@@ -79,5 +90,17 @@ export class RegistrationComponent implements OnInit {
 
     console.log(password === confirmPassword ? true : false);
     return password === confirmPassword ? null : undefined;
+  }
+
+  register(): void {
+    this.user = { ...this.form.value };
+    this.accountService.register(this.user).subscribe(
+      () => {
+        this.router.navigateByUrl('/dashboard');
+      },
+      (error: any) => {
+        this.toaster.error(error.error);
+      }
+    );
   }
 }

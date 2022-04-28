@@ -14,6 +14,7 @@ import { NavComponent } from './shared/nav/nav.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
@@ -80,6 +81,7 @@ defineLocale('pt-br', ptBrLocale);
     }),
     NgxSpinnerModule,
     NgxCurrencyModule,
+    PaginationModule.forRoot(),
   ],
 
   //provider de service

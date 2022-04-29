@@ -14,6 +14,7 @@ using System.IO;
 using ProEventos.API.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using ProEventos.Persistence.Models;
+using ProEventos.API.Helpers;
 //using ProEventos.Persistence.Models;
 
 namespace ProEventos.API.Controllers
@@ -51,13 +52,16 @@ namespace ProEventos.API.Controllers
 
 
         private readonly IEventoService _eventoService;
-        private readonly IWebHostEnvironment _hostEnvironment;
+        //private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IUtil _util;
         private readonly IAccountService _accountService;
 
-        public EventosController(IEventoService eventoService, IWebHostEnvironment hostEnvironment, IAccountService accountService)
+        private readonly string _destino = "Images";
+
+        public EventosController(IEventoService eventoService, IUtil util, IAccountService accountService)
         {
             _eventoService = eventoService;
-            _hostEnvironment = hostEnvironment;
+            _util = util;
             _accountService = accountService;
         }
 
@@ -184,7 +188,7 @@ namespace ProEventos.API.Controllers
 
                 if (await _eventoService.DeleteEvento(User.GetUserId(), id))
                 {
-                    DeleteImage(evento.ImagemURL);
+                    _util.DeleteImage(evento.ImagemURL, _destino);
                     return Ok(new { message = "Deletado" });
                 }
                 else
@@ -200,7 +204,6 @@ namespace ProEventos.API.Controllers
             }
         }
 
-
         [HttpPost("upload-image/{eventoId}")]
         public async Task<IActionResult> UploadImage(int eventoId)
         {
@@ -213,8 +216,8 @@ namespace ProEventos.API.Controllers
 
                 if (file.Length > 0)
                 {
-                    DeleteImage(evento.ImagemURL);
-                    evento.ImagemURL = await SaveImage(file);
+                    _util.DeleteImage(evento.ImagemURL, _destino);
+                    evento.ImagemURL = await _util.SaveImage(file, _destino);
                 }
 
                 var EventoRetorno = await _eventoService.UpdateEvento(User.GetUserId(), eventoId, evento);
@@ -228,39 +231,66 @@ namespace ProEventos.API.Controllers
         }
 
 
-        [NonAction]
-        [AllowAnonymous]
-        public async Task<string> SaveImage(IFormFile imageFile)
-        {
+        // [HttpPost("upload-image/{eventoId}")]
+        // public async Task<IActionResult> UploadImage(int eventoId)
+        // {
+        //     try
+        //     {
+        //         var evento = await _eventoService.GetEventoByIdAsync(User.GetUserId(), eventoId, true);
+        //         if (evento == null) return NoContent();
 
-            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-            imageName = $"{imageName}{DateTime.UtcNow.ToString("yymmssfff")}{Path.GetExtension(imageFile.FileName)}";
+        //         var file = Request.Form.Files[0];
+
+        //         if (file.Length > 0)
+        //         {
+        //             DeleteImage(evento.ImagemURL);
+        //             evento.ImagemURL = await SaveImage(file);
+        //         }
+
+        //         var EventoRetorno = await _eventoService.UpdateEvento(User.GetUserId(), eventoId, evento);
+        //         return Ok(EventoRetorno);
+        //     }
+        //     catch (Exception ex)
+        //     {
+
+        //         return this.StatusCode(StatusCodes.Status500InternalServerError, $"erro ao tentar adicionar imagens gg. Erro: {ex.Message} ");
+        //     }
+        // }
 
 
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
+        // [NonAction]
+        // [AllowAnonymous]
+        // public async Task<string> SaveImage(IFormFile imageFile)
+        // {
 
-            using (var fileStream = new FileStream(imagePath, FileMode.Create))
-            {
+        //     string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+        //     imageName = $"{imageName}{DateTime.UtcNow.ToString("yymmssfff")}{Path.GetExtension(imageFile.FileName)}";
 
-                await imageFile.CopyToAsync(fileStream);
-            }
 
-            return imageName;
+        //     var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
 
-        }
+        //     using (var fileStream = new FileStream(imagePath, FileMode.Create))
+        //     {
 
-        [NonAction]
-        [AllowAnonymous]
-        public void DeleteImage(string imageName)
-        {
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
+        //         await imageFile.CopyToAsync(fileStream);
+        //     }
 
-            if (System.IO.File.Exists(imagePath))
-            {
-                System.IO.File.Delete(imagePath);
-            }
+        //     return imageName;
 
-        }
+        // }
+
+        // [NonAction]
+        // [AllowAnonymous]
+        // public void DeleteImage(string imageName)
+        // {
+        //     var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
+
+        //     if (System.IO.File.Exists(imagePath))
+        //     {
+        //         System.IO.File.Delete(imagePath);
+        //     }
+
+        // }
 
     }
 }

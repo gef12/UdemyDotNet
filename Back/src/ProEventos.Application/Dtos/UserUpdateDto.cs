@@ -24,6 +24,8 @@ namespace ProEventos.Application.Dtos
 
         public string Token { get; set; }
 
+        public string ImagemURL { get; set; }
+
 
     }
 }

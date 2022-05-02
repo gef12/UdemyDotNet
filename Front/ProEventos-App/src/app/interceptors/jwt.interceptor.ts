@@ -32,14 +32,14 @@ export class JwtInterceptor implements HttpInterceptor {
       }
     });
 
-    return next.handle(request);
-    // return next.handle(request).pipe(
-    //   catchError((error) => {
-    //     if (error) {
-    //      localStorage.removeItem('user');
-    //     }
-    //     return throwError(error);
-    //   })
-    // );
+    //return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((error) => {
+        if (error) {
+          localStorage.removeItem('user');
+        }
+        return throwError(() => error);
+      })
+    );
   }
 }

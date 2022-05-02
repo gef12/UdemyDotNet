@@ -87,16 +87,16 @@ namespace ProEventos.API.Controllers
 
         }
 
-        [HttpGet("palestrate")]
+        [HttpGet("palestrante")]
         public async Task<IActionResult> GetByPalestrante()
         {
             try
             {
-                var palestrate = await _palestranteService.GetPalestranteByUserIdAsync(User.GetUserId());
-                if (palestrate == null) return Unauthorized();
+                var palestrante = await _palestranteService.GetPalestranteByUserIdAsync(User.GetUserId());
+                if (palestrante == null) return Unauthorized();
 
 
-                var redeSocials = await _redeSocialService.GetAllByPalestranteIdAsync(palestrate.Id);
+                var redeSocials = await _redeSocialService.GetAllByPalestranteIdAsync(palestrante.Id);
                 if (redeSocials == null) return NoContent();
 
                 return Ok(redeSocials);

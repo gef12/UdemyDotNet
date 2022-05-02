@@ -21,6 +21,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { NgxCurrencyModule } from 'ngx-currency';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { EventoService } from './services/evento.service';
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
@@ -41,6 +42,12 @@ import { LoteService } from './services/lote.service';
 import { AccountService } from './services/account.service';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { HomeComponent } from './components/home/home.component';
+import { PerfilDetalheComponent } from './components/user/perfil/perfil-detalhe/perfil-detalhe.component';
+import { PalestranteListaComponent } from './components/palestrantes/palestrante-lista/palestrante-lista.component';
+import { PalestranteDetalheComponent } from './components/palestrantes/palestrante-detalhe/palestrante-detalhe.component';
+import { RedesSociaisComponent } from './components/redesSociais/redesSociais.component';
+import { PalestranteService } from './services/palestrante.service';
+import { RedeSocialService } from './services/redeSocial.service';
 defineLocale('pt-br', ptBrLocale);
 
 @NgModule({
@@ -48,9 +55,13 @@ defineLocale('pt-br', ptBrLocale);
     AppComponent,
     EventosComponent,
     PalestrantesComponent,
+    PalestranteListaComponent,
+    PalestranteDetalheComponent,
+    RedesSociaisComponent,
     ContatosComponent,
     DashboardComponent,
     PerfilComponent,
+    PerfilDetalheComponent,
     NavComponent,
     TituloComponent,
     DateTimeFormatPipe,
@@ -82,6 +93,7 @@ defineLocale('pt-br', ptBrLocale);
     NgxSpinnerModule,
     NgxCurrencyModule,
     PaginationModule.forRoot(),
+    TabsModule.forRoot(),
   ],
 
   //provider de service
@@ -89,6 +101,8 @@ defineLocale('pt-br', ptBrLocale);
     EventoService,
     LoteService,
     AccountService,
+    PalestranteService,
+    RedeSocialService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],

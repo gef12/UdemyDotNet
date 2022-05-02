@@ -21,12 +21,11 @@ export class EventoListaComponent implements OnInit {
   public eventos: Evento[] = [];
   public eventoId = 0;
 
-  public pagination = {} as Pagination;
-
   public widthImg: number = 150;
   public marginImg: number = 2;
   public mostrarImg = true;
 
+  public pagination = {} as Pagination;
   termoBuscaChanged: Subject<string> = new Subject<string>();
   // private _filtroLista: string = '';
 
